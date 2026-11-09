@@ -10,6 +10,15 @@
 :root[data-theme="dark"]{--bg:#0c0c10;--surface:#16161d;--text:#f2f2f6;--muted:#9a9aa8;--line:#272731;--zone:#3a3a46;--body:#2b2b36;--tyre:#08080b}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);z-index:10}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{width:min(1040px,100% - 2rem);margin-inline:auto;display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-weight:900;letter-spacing:-.03em;font-size:1.25rem;text-decoration:none;color:var(--text)}
+.logo span{color:var(--accent)}
+.back{display:inline-flex;align-items:center;gap:.4rem;padding:.4rem .85rem;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--text);text-decoration:none;font-size:.88rem;font-weight:600}
+.back:hover{border-color:var(--accent)}
+.back svg{width:1em;height:1em}
+.logo:focus-visible,.back:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 .wrap{width:min(1040px,100% - 2rem);margin-inline:auto;padding:2rem 0 3rem}
 h1{font-size:clamp(1.5rem,4.5vw,2.2rem);line-height:1.15;margin:0 0 .4rem;letter-spacing:-.01em}
@@ -56,6 +65,12 @@ ul{list-style:none;margin:0;padding:0}
 </style>
 </head>
 <body>
+<header>
+  <nav class="nav" aria-label="Site">
+    <a class="logo" href="https://andylia2486.github.io/grid2026/" aria-label="GRID 26 home">GRID<span>26</span></a>
+    <a class="back" href="https://andylia2486.github.io/grid2026/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Back to GRID 26</a>
+  </nav>
+</header>
 <main class="wrap">
   <h1>2026 Car Updates, Part By Part</h1>
   <p class="sub">Pick a team, then tap a part of the car or a row in the list to see what that team changed and when.</p>
