@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <title>2026 F1 Car Updates, Part By Part</title>
 <style>
 :root{--bg:#f5f5f7;--surface:#fff;--text:#14141a;--muted:#5d5d6b;--line:#e1e1e8;--accent:#e10600;--zone:#d3d3dc;--body:#b9b9c6;--tyre:#2a2a33;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light dark}
@@ -19,10 +22,12 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:col
 .back:hover{border-color:var(--accent)}
 .back svg{width:1em;height:1em}
 .logo:focus-visible,.back:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;font-size:clamp(15px,14.2px + .3vw,17px)}
+body{margin:0;background:var(--bg);color:var(--text);font-size:1rem;overflow-wrap:break-word;line-height:1.5;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display",Inter,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+button,input,select,textarea{font-family:inherit}
 .wrap{width:min(1040px,100% - 2rem);margin-inline:auto;padding:2rem 0 3rem}
-h1{font-size:clamp(1.5rem,4.5vw,2.2rem);line-height:1.15;margin:0 0 .4rem;letter-spacing:-.01em}
-.sub{color:var(--muted);margin:0 0 1.25rem;max-width:none;font-size:clamp(.92rem,.8rem + .6vw,1.2rem);line-height:1.45;text-wrap:balance}
+h1{font-size:clamp(1rem,calc((100vw - 2rem) / 16),3.4rem);white-space:nowrap;line-height:1.15;margin:0 0 .4rem;letter-spacing:-.01em}
+.sub{color:var(--muted);margin:0 0 1.25rem;max-width:none;font-size:clamp(.9rem,.75rem + .5vw,1.1rem);line-height:1.5;text-wrap:pretty}
 button{font:inherit;color:inherit;cursor:pointer}
 button:focus-visible,.zone:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .teams{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.25rem}
@@ -59,6 +64,13 @@ ul{list-style:none;margin:0;padding:0}
 .det li b{color:var(--muted);font-weight:600}
 .empty{color:var(--muted);margin:0;font-size:clamp(.88rem,.82rem + .3vw,1rem)}
 .note{color:var(--muted);font-size:.82rem;margin-top:1.25rem}
+footer{border-top:1px solid var(--line);padding:2rem 0;color:var(--muted);font-size:.85rem;text-align:center}
+footer .wrap{padding:0}
+footer p{margin:0}
+footer .contact{margin-top:.6rem;font-size:.68rem}
+footer a{color:var(--muted);text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
+footer a:hover{color:var(--text)}
+footer a:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}
 @media (max-width:820px){.grid{grid-template-columns:1fr}}
 @container (max-width:360px){.det li{grid-template-columns:1fr;gap:0}}
 @media (prefers-reduced-motion:reduce){.zone{transition:none}}
@@ -92,8 +104,14 @@ ul{list-style:none;margin:0;padding:0}
     </div>
     <section class="panel" id="panel" aria-live="polite"></section>
   </div>
-  <p class="note">Covers headline updates through the São Paulo Grand Prix, not every part declared to the FIA. An empty part means none turned up in my sources, not that the team brought nothing. Sources: The Race, GPFans, F1.com, Coffee Corner Motorsport, F1IQ. Check the FIA’s per-race documents for the full record.</p>
+  <p class="note">Headline updates through the São Paulo GP, not every declared part. An empty part means none were found in my sources.</p>
 </main>
+<footer>
+  <div class="wrap">
+    <p>An unofficial fan-made guide to the 2026 Formula 1 grid. Team and driver lineups may change during the season.</p>
+    <p class="contact">Where to find me? <a href="mailto:adeliaroselle@gmail.com?subject=Grid%2026%20website">adeliaroselle@gmail.com</a></p>
+  </div>
+</footer>
 <script>
 const PARTS = {front:"Front wing",rear:"Rear wing",floor:"Floor",side:"Sidepods and cooling",engine:"Engine cover",pu:"Power unit",diff:"Diffuser and rear end",corner:"Corners, brakes and suspension"};
 // team: [name, colour, text colour on that colour, {part:[ "race|update" ]}, general updates]
@@ -192,10 +210,11 @@ function render(){
   panel.innerHTML = `<h2>${name} updates</h2>${whole}<ul class="parts">${rows}</ul>`;
 }
 $("#teams").addEventListener("click", e => { const b = e.target.closest("[data-team]"); if(b){ team = b.dataset.team; render(); } });
-$("#panel").addEventListener("click", e => { const b = e.target.closest("[data-part]"); if(b){ part = b.dataset.part; render(); } });
+const pick = k => { part = (part === k) ? null : k; render(); };
+$("#panel").addEventListener("click", e => { const b = e.target.closest("[data-part]"); if(b){ const k = b.dataset.part; pick(k); const nb = document.querySelector(`.row[data-part="${k}"]`); if(nb) nb.focus({preventScroll:true}); } });
 document.querySelectorAll(".zone").forEach(z => {
-  z.addEventListener("click", () => { part = z.dataset.part; render(); });
-  z.addEventListener("keydown", e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); part = z.dataset.part; render(); } });
+  z.addEventListener("click", () => pick(z.dataset.part));
+  z.addEventListener("keydown", e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); pick(z.dataset.part); } });
 });
 render();
 </script>
